@@ -1,127 +1,127 @@
 ---
 
-rtpagent_version: latest
+rtpengine_version: latest
 
-rtpagent_service_name: rtpagent
+rtpengine_service_name: rtpengine
 
-rtpagent_user: rtpagent
-rtpagent_group: "{{ rtpagent_user }}"
+rtpengine_user: rtpengine
+rtpengine_group: "{{ rtpengine_user }}"
 
-rtpagent_latest_release_url: "https://api.github.com/repos/sippy/rtpagent/releases/latest"
-rtpagent_download_base_url: "https://github.com/sippy/rtpagent/archive"
+rtpengine_latest_release_url: "https://api.github.com/repos/sippy/rtpengine/releases/latest"
+rtpengine_download_base_url: "https://github.com/sippy/rtpengine/archive"
 
-rtpagent_install_dir: /opt/rtpagent
-rtpagent_download_dir: /tmp
+rtpengine_install_dir: /opt/rtpengine
+rtpengine_download_dir: /tmp
 
-rtpagent_force_install: false
-rtpagent_cleanup_downloads: true
+rtpengine_force_install: false
+rtpengine_cleanup_downloads: true
 
 
 
-rtpagent_log_dir: /var/log/rtpagent
-rtpagent_log_file: rtpagent.log
-rtpagent_logrotate_days: 30
-rtpagent_syslog_facility: local5
+rtpengine_log_dir: /var/log/rtpengine
+rtpengine_log_file: rtpengine.log
+rtpengine_logrotate_days: 30
+rtpengine_syslog_facility: local5
 
 # Configures the verbosity level of the log output. Possible log_level values in the order
 # from the most verbose to the least verbose are: DBUG, INFO, WARN, ERR and CRIT.
-rtpagent_log_level: "INFO:LOG_{{ rtpagent_syslog_facility|upper }}"
+rtpengine_log_level: "INFO:LOG_{{ rtpengine_syslog_facility|upper }}"
 
 
-# This parameter configures rtpagent control socket.
+# This parameter configures rtpengine control socket.
 # The control socket is used by the call controller for the purpose of creating, modifying,
 # and deleting RTP sessions. The control socket can also be used to fetch stats from
-#  the rtpagent process, or about specific media sessions.
+#  the rtpengine process, or about specific media sessions.
 # Examples:
 #    udp:127.0.0.1:9000
 #    udp:*:9001
 #    tcp:*:9002
-#    unix:/var/run/rtpagent.dock
-#    cunix:/var/run/rtpagent.dock
+#    unix:/var/run/rtpengine.dock
+#    cunix:/var/run/rtpengine.dock
 # This is an equivalent of command line argument "-s ctrl_socket".
-# rtpagent_ctrl_socket: "unix:/var/run/rtpagent/rtpagent.sock"
-rtpagent_ctrl_socket: "udp:*:22222"
+# rtpengine_ctrl_socket: "unix:/var/run/rtpengine/rtpengine.sock"
+rtpengine_ctrl_socket: "udp:*:22222"
 
 # IPv4 listen IP address(es). You can specify either one or two addresses.
-# If two addresses are specified, the rtpagent will work in bridging mode.
+# If two addresses are specified, the rtpengine will work in bridging mode.
 # This is an equivalent of command line argument "-l addr1[/addr2]".
-rtpagent_addr: 0.0.0.0
+rtpengine_addr: 0.0.0.0
 
 # IPv6 listen IP address(es). You can specify either one or two addresses.
-# If two addresses are specified, the rtpagent will work in bridging mode.
+# If two addresses are specified, the rtpengine will work in bridging mode.
 # This is an equivalent of command line argument "-6 addr1[/addr2]".
-# rtpagent_ipv6_addr:
+# rtpengine_ipv6_addr:
 
-# Set advertised address of rtpagent. Useful if the rtpagent is behind a NAT firewall  (like Amazon EC2).
-# When the rtpagent receives a session request from a SIP controller it will return the IP address(es)
+# Set advertised address of rtpengine. Useful if the rtpengine is behind a NAT firewall  (like Amazon EC2).
+# When the rtpengine receives a session request from a SIP controller it will return the IP address(es)
 # specified in this option.
 # This is an equivalent of command line argument "-A advaddr1[/advaddr2]".
-rtpagent_advaddr:
+rtpengine_advaddr:
 
 # This is an equivalent of command line argument "-t tos".
-rtpagent_tos: "0xB8"
+rtpengine_tos: "0xB8"
 
 # Directory to write recorded RTP sessions.
 # This is an equivalent of command line argument "-r rec_dir".
-rtpagent_recording_dir:
+rtpengine_recording_dir:
 
 # Spool directory for recording of RTP streams. When the session is stopped,
 # the recording will be moved from the spool directory to the rec_dir directory
-# as specified by the `rtpagent_recording_dir` option.
+# as specified by the `rtpengine_recording_dir` option.
 # This is an equivalent of command line argument "-S spool_dir".
-rtpagent_spool_dir:
+rtpengine_spool_dir:
 
 # Prevent recording RTCP packets.
 # This is an equivalent of command line argument "-R"
-rtpagent_prevent_recording_rtcp: true
+rtpengine_prevent_recording_rtcp: true
 
-# This parameter configures the name of the file where PID of running rtpagent will be stored.
-# Default is /var/run/rtpagent.pid.
+# This parameter configures the name of the file where PID of running rtpengine will be stored.
+# Default is /var/run/rtpengine.pid.
 # This is an equivalent of command line argument "-p pid_file"
-rtpagent_pid_file: /run/rtpagent/rtpagent.pid
+rtpengine_pid_file: /run/rtpengine/rtpengine.pid
 
 # Specify the RTP inactivity timer. Defaults to 60 seconds.
-# If the rtpagent does not receive any RTP packets for more than max_ttl it will then delete the session.
+# If the rtpengine does not receive any RTP packets for more than max_ttl it will then delete the session.
 # This is an equivalent of command line argument "-T max_ttl"
-rtpagent_max_ttl: 60
+rtpengine_max_ttl: 60
 
 
 # Set the maximum number of open file descriptors per process.
 # The default maximum is set by the operating system.
-# The rtpagent requires four file descriptors per session to ensure that it can reliably identify
+# The rtpengine requires four file descriptors per session to ensure that it can reliably identify
 # where each stream is coming from in a NAT firewall scenario.
 # This is an equivalent of command line argument "-L nofile_limit"
-rtpagent_nofile_limit: 16384
+rtpengine_nofile_limit: 16384
 
-# Set lower limit on UDP ports range that the rtpagent uses for RTP/RTCP sessions to min_port.
+# Set lower limit on UDP ports range that the rtpengine uses for RTP/RTCP sessions to min_port.
 # Default is 35000.
 # This is an equivalent of command line argument "-m min_port"
-rtpagent_min_port: 35000
+rtpengine_min_port: 35000
 
-# Set upper limit on UDP ports range that the rtpagent uses for RTP/RTCP sessions to max_port.
+# Set upper limit on UDP ports range that the rtpengine uses for RTP/RTCP sessions to max_port.
 # Default is 65000.
 # This is an equivalent of command line argument "-M max_port"
-rtpagent_max_port: 65000
+rtpengine_max_port: 65000
 
 
-# Switch rtpagent to UID identified by the uname
+# Switch rtpengine to UID identified by the uname
 # and optional GID identified by gname when proxy is up and running.
 # This is an equivalent of command line argument "-u uname[:gname]"
-rtpagent_uname: "{{ rtpagent_user }}:{{ rtpagent_group }}"
+rtpengine_uname: "{{ rtpengine_user }}:{{ rtpengine_group }}"
 
 # Set access mode for the controlling UNIX-socket (if used).
-# Only applies if rtpagent runs under a different GID using -u option.
+# Only applies if rtpengine runs under a different GID using -u option.
 # This is an equivalent of command line argument "-w sock_mode"
-rtpagent_sock_mode:
+rtpengine_sock_mode:
 
 
 # Treat all RTP/RTCP sessions as "assymetric", i.e. disable any NAT traversal features unconditionally.
-rtpagent_force_assymetric: false
+rtpengine_force_assymetric: false
 
 
-# Additional arguments passed to rtpagent in command line
+# Additional arguments passed to rtpengine in command line
 # Use it for the parameters that were not defined in this variables file.
-rtpagent_extra_args:
+rtpengine_extra_args:
 
 # The following command line arguments were not implemented:
 #  -F

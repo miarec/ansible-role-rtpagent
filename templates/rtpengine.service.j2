@@ -1,0 +1,37 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=rtpengine
+After=network.target
+Documentation=https://www.rtpengine.org
+
+[Service]
+Type=simple
+PIDFile={{ rtpengine_pid_file }}
+
+Restart=always
+RestartSec=5s
+
+LimitNOFILE={{ rtpengine_nofile_limit }}
+
+ExecStartPre=-/bin/mkdir /run/rtpengine
+ExecStartPre=-/bin/chown {{ rtpengine_user }}:{{ rtpengine_group }} /run/rtpengine
+
+ExecStart={{ rtpengine_install_dir }}/bin/rtpengine \
+    -p {{ rtpengine_pid_file }} \
+    -u {{ rtpengine_uname }} \
+    -s {{ rtpengine_ctrl_socket }} \
+    -l {{ rtpengine_addr }} \
+    {{ "-A " + rtpengine_advaddr if rtpengine_advaddr else "" }} \
+    -m {{ rtpengine_min_port }} -M {{ rtpengine_max_port }} \
+    -T {{ rtpengine_max_ttl }} \
+    -d {{ rtpengine_log_level }}
+
+ExecStop=/usr/bin/pkill -F {{ rtpengine_pid_file }}
+ExecStopPost=-/bin/rm -R /run/rtpengine
+
+TimeoutStartSec=10
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

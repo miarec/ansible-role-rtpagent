@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-{{ rtpagent_log_dir }}/{{ rtpagent_log_file }} {
+{{ rtpengine_log_dir }}/{{ rtpengine_log_file }} {
     missingok
     notifempty
     compress
@@ -8,5 +8,5 @@
     copytruncate
     daily
     dateext
-    rotate {{ rtpagent_logrotate_days }}
+    rotate {{ rtpengine_logrotate_days }}
 }

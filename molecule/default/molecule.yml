@@ -20,7 +20,7 @@ provisioner:
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
   env:
-    RTPAGENT_VERSION: ${MOLECULE_RTPAGENT_VERSION:-'latest'}
+    RTPENGINE_VERSION: ${MOLECULE_RTPENGINE_VERSION:-'latest'}
     ANSIBLE_VERBOSITY: ${MOLECULE_ANSIBLE_VERBOSITY:-0}
 
 verifier:

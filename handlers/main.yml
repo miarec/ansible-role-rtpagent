@@ -10,8 +10,8 @@
     state: restarted
   become: true
 
-- name: restart rtpagent       # noqa name[casing]
+- name: restart rtpengine       # noqa name[casing]
   service:
-    name: "{{ rtpagent_service_name }}"
+    name: "{{ rtpengine_service_name }}"
     state: restarted
   become: true

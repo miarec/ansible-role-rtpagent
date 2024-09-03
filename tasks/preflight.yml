@@ -6,20 +6,20 @@
     - "../vars/{{ ansible_distribution }}.yml"
     - "../vars/{{ ansible_os_family }}.yml"
 
-- name: Add rtpagent group
+- name: Add rtpengine group
   group:
-    name: "{{ rtpagent_group }}"
+    name: "{{ rtpengine_group }}"
     state: present
     system: true
-  when: rtpagent_group != "root"
+  when: rtpengine_group != "root"
 
-- name: Add rtpagent user
+- name: Add rtpengine user
   user:
-    name: "{{ rtpagent_user }}"
-    group: "{{ rtpagent_group }}"
-    comment: "rtpagent"
-    home: "{{ rtpagent_install_dir }}"
+    name: "{{ rtpengine_user }}"
+    group: "{{ rtpengine_group }}"
+    comment: "rtpengine"
+    home: "{{ rtpengine_install_dir }}"
     shell: /bin/false
     system: true
-  when: rtpagent_user != "root"
+  when: rtpengine_user != "root"
 

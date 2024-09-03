@@ -1,8 +1,8 @@
 ---
 galaxy_info:
   author: miarec
-  description: Deploy rtpagent.
-  role_name: rtpagent
+  description: Deploy rtpengine.
+  role_name: rtpengine
   license: MIT
   company: MiaRec, Inc.
   min_ansible_version: '2.7'
@@ -12,6 +12,6 @@ galaxy_info:
         - focal
         - jammy
   galaxy_tags:
-    - rtpagent
+    - rtpengine
 
 dependencies: []

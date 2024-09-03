@@ -2,14 +2,14 @@
 - name: Set OS Specific variables
   include_tasks: preflight.yml
 
-- name: Check if rtpagent is installed
-  command: "which {{ rtpagent_install_dir }}/bin/rtpagent"
-  register: rtpagent_exists
+- name: Check if rtpengine is installed
+  command: "which {{ rtpengine_install_dir }}/bin/rtpengine"
+  register: rtpengine_exists
   failed_when: false
   ignore_errors: true
   changed_when: false
 
 - include_tasks: install_from_source.yml    # noqa name[missing]
-  when: rtpagent_force_install|bool or rtpagent_exists.rc != 0
+  when: rtpengine_force_install|bool or rtpengine_exists.rc != 0
 
 - include_tasks: configure.yml    # noqa name[missing]

@@ -6,8 +6,8 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 def test_directories(host):
     dirs = [
-        "/var/log/rtpagent",
-        "/opt/rtpagent",
+        "/var/log/rtpengine",
+        "/opt/rtpengine",
     ]
 
     for dir in dirs:
@@ -18,7 +18,7 @@ def test_directories(host):
 def test_files(host):
 
     files = [
-        "/var/log/rtpagent/rtpagent.log"
+        "/var/log/rtpengine/rtpengine.log"
     ]
 
     for file in files:
@@ -27,7 +27,7 @@ def test_files(host):
         assert f.is_file
 
 def test_service(host):
-    s = host.service("rtpagent")
+    s = host.service("rtpengine")
 
     assert s.is_enabled
     assert s.is_running

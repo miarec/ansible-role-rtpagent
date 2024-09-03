@@ -1,72 +1,72 @@
 ---
-- name: Install source dependencies for rtpagent
+- name: Install source dependencies for rtpengine
   package:
     name: "{{ item }}"
     state: present
     update_cache: true
-  with_items: "{{ rtpagent_source_dependencies }}"
+  with_items: "{{ rtpengine_source_dependencies }}"
 
-- name: Create rtpagent Install directory
+- name: Create rtpengine Install directory
   file:
-    path: "{{ rtpagent_install_dir }}"
+    path: "{{ rtpengine_install_dir }}"
     state: directory
-    owner: "{{ rtpagent_user }}"
-    group: "{{ rtpagent_group }}"
+    owner: "{{ rtpengine_user }}"
+    group: "{{ rtpengine_group }}"
     mode: "0755"
 
 - name: Identifying the latest software release
   uri:
-    url: "{{ rtpagent_latest_release_url }}"
+    url: "{{ rtpengine_latest_release_url }}"
     return_content: yes
   register: latest_release
-  when: rtpagent_version == "latest"
+  when: rtpengine_version == "latest"
 
 - set_fact:    # noqa name[missing]
-    rtpagent_download_version: "{{ latest_release.json.tag_name | trim('v') }}"
-  when: rtpagent_version == "latest"
+    rtpengine_download_version: "{{ latest_release.json.tag_name | trim('v') }}"
+  when: rtpengine_version == "latest"
 
 - set_fact:    # noqa name[missing]
-    rtpagent_download_version: "{{ rtpagent_version }}"
-  when: rtpagent_version != "latest"
+    rtpengine_download_version: "{{ rtpengine_version }}"
+  when: rtpengine_version != "latest"
 
-- name: Clone rtpagent GitHub repository
+- name: Clone rtpengine GitHub repository
   git:
-    repo: https://github.com/sippy/rtpagent.git
-    dest: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version}}"
-    version: "v{{ rtpagent_download_version }}"
+    repo: https://github.com/sippy/rtpengine.git
+    dest: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version}}"
+    version: "v{{ rtpengine_download_version }}"
     recursive: true
     clone: true
 
-- name: Run rtpagent configure
-  shell: umask 0022 && ./configure --prefix={{ rtpagent_install_dir }}
+- name: Run rtpengine configure
+  shell: umask 0022 && ./configure --prefix={{ rtpengine_install_dir }}
   args:
-    chdir: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}"
-    creates: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}/Makefile"
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}"
+    creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}/Makefile"
 
-- name: Compile rtpagent
+- name: Compile rtpengine
   shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }}
   args:
-    chdir: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}"
-    creates: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version}}/src/rtpagent"
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}"
+    creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version}}/src/rtpengine"
 
-- name: Install rtpagent
+- name: Install rtpengine
   shell: umask 0022 && make install
   args:
-    chdir: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}"
-    creates: "{{ rtpagent_install_dir }}/bin/rtpagent"
-  notify: restart rtpagent
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}"
+    creates: "{{ rtpengine_install_dir }}/bin/rtpengine"
+  notify: restart rtpengine
 
-- name: Register rtpagent binaries
-  command: ls -1 {{ rtpagent_install_dir }}/bin
-  register: _rtpagent_binaries
+- name: Register rtpengine binaries
+  command: ls -1 {{ rtpengine_install_dir }}/bin
+  register: _rtpengine_binaries
   changed_when: false
 
-- name: Add rtpagent binaries to alternatives
+- name: Add rtpengine binaries to alternatives
   alternatives:
     name: "{{ item }}"
-    path: "{{ rtpagent_install_dir }}/bin/{{ item }}"
+    path: "{{ rtpengine_install_dir }}/bin/{{ item }}"
     link: "/usr/bin/{{ item }}"
-  with_items: "{{ _rtpagent_binaries.stdout_lines }}"
+  with_items: "{{ _rtpengine_binaries.stdout_lines }}"
 
 # Cleanup Source Files
 - name: Clean up the source files
@@ -74,7 +74,7 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}"
-    - "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}.tar.gz"
-  when: rtpagent_cleanup_downloads|bool
+    - "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}"
+    - "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}.tar.gz"
+  when: rtpengine_cleanup_downloads|bool
   become: true

@@ -1,6 +1,6 @@
 ---
 
-rtpproxy_source_dependencies:
+rtpengine_source_dependencies:
   - gcc
   - make
   - git
