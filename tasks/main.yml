@@ -12,4 +12,4 @@
 - include_tasks: install_from_source.yml    # noqa name[missing]
   when: rtpengine_force_install|bool or rtpengine_exists.rc != 0
 
-- include_tasks: configure.yml    # noqa name[missing]
+# - include_tasks: configure.yml    # noqa name[missing]

@@ -1,6 +1,6 @@
 # ansible-role-rtpengine
 
-Ansible role for installing atpagent
+Ansible role for installing rtpengine
 
 ![CI](https://github.com/miarec/ansible-role-rtpengine/actions/workflows/ci.yml/badge.svg?event=push)
 

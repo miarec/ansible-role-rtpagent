@@ -1,6 +1,70 @@
 ---
 
 rtpengine_source_dependencies:
-  - gcc
-  - make
+  # - gcc
+  # - make
+  # - git
+  # - libglib2.0-dev
+  # - libjsonrpc-glib-1.0-dev
   - git
+  - dkms
+  # - "linux-headers-{{ ansible_kernel }}"
+  - build-essential
+  - dpkg-dev
+  - cmake
+  - unzip
+  - wget
+  - debhelper-compat
+  - default-libmysqlclient-dev
+  - gperf
+  # - iptables-dev
+  - libavcodec-dev
+  - libavfilter-dev
+  - libavformat-dev
+  - libavutil-dev
+  - libbencode-perl
+  - libcrypt-openssl-rsa-perl
+  - libcrypt-rijndael-perl
+  - libcurl4-openssl-dev
+  - libdigest-crc-perl
+  - libdigest-hmac-perl
+  - libevent-dev
+  - libglib2.0-dev
+  - libhiredis-dev
+  - libio-multiplex-perl
+  - libio-socket-inet6-perl
+  - libiptc-dev
+  - libjson-glib-dev
+  - libnet-interface-perl
+  - libpcap0.8-dev
+  - libpcre3-dev
+  - libsocket6-perl
+  - libspandsp-dev
+  - libssl-dev
+  - libswresample-dev
+  - libsystemd-dev
+  - libxmlrpc-core-c3-dev
+  - markdown
+  - curl
+  - zlib1g-dev
+  - libwebsockets-dev
+  - nfs-common
+  - libmosquitto-dev
+  - python3-websockets
+  - libconfig-tiny-perl
+  - libnftnl-dev
+  - pandoc
+  - libncurses-dev
+  - libopus-dev
+  - libopus0
+  - opus-tools
+  - libmnl-dev
+
+
+
+# gcc g++ make cmake build-essential git libxtables-dev libip6tc-dev libip4tc-dev libiptc-dev libavfilter-dev libavcodec-dev libswresample-dev libevent-dev libpcap-dev libxmlrpc-core-c3-dev markdown libjson-glib-dev libhiredis-dev libssl-dev libcurl4-openssl-dev gperf libspandsp-dev
+# libopus-dev libopus0 opus-tool
+# libmysqlclient-dev
+# libwebsockets-dev
+# libmnl-dev
+# libmnl-dev

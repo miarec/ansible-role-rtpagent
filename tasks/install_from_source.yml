@@ -14,57 +14,60 @@
     group: "{{ rtpengine_group }}"
     mode: "0755"
 
-- name: Identifying the latest software release
-  uri:
-    url: "{{ rtpengine_latest_release_url }}"
-    return_content: yes
-  register: latest_release
-  when: rtpengine_version == "latest"
+# - name: Identifying the latest software release
+#   uri:
+#     url: "{{ rtpengine_latest_release_url }}"
+#     return_content: yes
+#   register: latest_release
+#   when: rtpengine_version == "latest"
 
-- set_fact:    # noqa name[missing]
-    rtpengine_download_version: "{{ latest_release.json.tag_name | trim('v') }}"
-  when: rtpengine_version == "latest"
+# - debug: var=latest_release
+
+# - set_fact:    # noqa name[missing]
+#     rtpengine_download_version: "{{ latest_release.json.tag_name | trim('v') }}"
+#   when: rtpengine_version == "latest"
 
 - set_fact:    # noqa name[missing]
     rtpengine_download_version: "{{ rtpengine_version }}"
-  when: rtpengine_version != "latest"
+#   when: rtpengine_version != "latest"
 
 - name: Clone rtpengine GitHub repository
   git:
-    repo: https://github.com/sippy/rtpengine.git
+    repo: https://github.com/sipwise/rtpengine.git
     dest: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version}}"
-    version: "v{{ rtpengine_download_version }}"
+    # version: "v{{ rtpengine_download_version }}"
+    version: "mr{{ rtpengine_version }}"
     recursive: true
     clone: true
 
 - name: Run rtpengine configure
-  shell: umask 0022 && ./configure --prefix={{ rtpengine_install_dir }}
+  shell: umask 0022 && ./configure
   args:
     chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}"
     creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}/Makefile"
 
 - name: Compile rtpengine
-  shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }}
+  shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }} DESTDIR={{ rtpengine_install_dir }}
   args:
     chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}"
     creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version}}/src/rtpengine"
 
 - name: Install rtpengine
-  shell: umask 0022 && make install
+  shell: umask 0022 && make install DESTDIR={{ rtpengine_install_dir }}
   args:
     chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_download_version }}"
     creates: "{{ rtpengine_install_dir }}/bin/rtpengine"
   notify: restart rtpengine
 
 - name: Register rtpengine binaries
-  command: ls -1 {{ rtpengine_install_dir }}/bin
+  command: ls -1 {{ rtpengine_install_dir }}/usr/bin
   register: _rtpengine_binaries
   changed_when: false
 
 - name: Add rtpengine binaries to alternatives
   alternatives:
     name: "{{ item }}"
-    path: "{{ rtpengine_install_dir }}/bin/{{ item }}"
+    path: "{{ rtpengine_install_dir }}/usr/bin/{{ item }}"
     link: "/usr/bin/{{ item }}"
   with_items: "{{ _rtpengine_binaries.stdout_lines }}"
 

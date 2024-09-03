@@ -1,14 +1,16 @@
 ---
 
-rtpengine_version: latest
+# rtpengine_version: latest
+# https://github.com/sipwise/rtpengine/tags
+rtpengine_version: 12.5.1.4
 
 rtpengine_service_name: rtpengine
 
 rtpengine_user: rtpengine
 rtpengine_group: "{{ rtpengine_user }}"
 
-rtpengine_latest_release_url: "https://api.github.com/repos/sippy/rtpengine/releases/latest"
-rtpengine_download_base_url: "https://github.com/sippy/rtpengine/archive"
+rtpengine_latest_release_url: "https://api.github.com/repos/sipwise/rtpengine/releases/latest"
+rtpengine_download_base_url: "https://github.com/sipwise/rtpengine/archive"
 
 rtpengine_install_dir: /opt/rtpengine
 rtpengine_download_dir: /tmp

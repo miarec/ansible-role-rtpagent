@@ -5,7 +5,7 @@
 
   pre_tasks:
     - set_fact:
-        rtpengine_version: "{{ lookup('env', 'rtpengine_version:_VERSION') }}"
+        rtpengine_version: "{{ lookup('env', 'RTPENGINE_VERSION') }}"
 
     - name: Install prerequisites
       block:
