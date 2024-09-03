@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: miarec
+  description: Deploy rtpagent.
+  role_name: rtpagent
+  license: MIT
+  company: MiaRec, Inc.
+  min_ansible_version: '2.7'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+  galaxy_tags:
+    - rtpagent
+
+dependencies: []

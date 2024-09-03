@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+
+{{ rtpagent_log_dir }}/{{ rtpagent_log_file }} {
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    daily
+    dateext
+    rotate {{ rtpagent_logrotate_days }}
+}

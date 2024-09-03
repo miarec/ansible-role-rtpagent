@@ -1,0 +1,80 @@
+---
+- name: Install source dependencies for rtpagent
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items: "{{ rtpagent_source_dependencies }}"
+
+- name: Create rtpagent Install directory
+  file:
+    path: "{{ rtpagent_install_dir }}"
+    state: directory
+    owner: "{{ rtpagent_user }}"
+    group: "{{ rtpagent_group }}"
+    mode: "0755"
+
+- name: Identifying the latest software release
+  uri:
+    url: "{{ rtpagent_latest_release_url }}"
+    return_content: yes
+  register: latest_release
+  when: rtpagent_version == "latest"
+
+- set_fact:    # noqa name[missing]
+    rtpagent_download_version: "{{ latest_release.json.tag_name | trim('v') }}"
+  when: rtpagent_version == "latest"
+
+- set_fact:    # noqa name[missing]
+    rtpagent_download_version: "{{ rtpagent_version }}"
+  when: rtpagent_version != "latest"
+
+- name: Clone rtpagent GitHub repository
+  git:
+    repo: https://github.com/sippy/rtpagent.git
+    dest: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version}}"
+    version: "v{{ rtpagent_download_version }}"
+    recursive: true
+    clone: true
+
+- name: Run rtpagent configure
+  shell: umask 0022 && ./configure --prefix={{ rtpagent_install_dir }}
+  args:
+    chdir: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}"
+    creates: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}/Makefile"
+
+- name: Compile rtpagent
+  shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }}
+  args:
+    chdir: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}"
+    creates: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version}}/src/rtpagent"
+
+- name: Install rtpagent
+  shell: umask 0022 && make install
+  args:
+    chdir: "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}"
+    creates: "{{ rtpagent_install_dir }}/bin/rtpagent"
+  notify: restart rtpagent
+
+- name: Register rtpagent binaries
+  command: ls -1 {{ rtpagent_install_dir }}/bin
+  register: _rtpagent_binaries
+  changed_when: false
+
+- name: Add rtpagent binaries to alternatives
+  alternatives:
+    name: "{{ item }}"
+    path: "{{ rtpagent_install_dir }}/bin/{{ item }}"
+    link: "/usr/bin/{{ item }}"
+  with_items: "{{ _rtpagent_binaries.stdout_lines }}"
+
+# Cleanup Source Files
+- name: Clean up the source files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}"
+    - "{{ rtpagent_download_dir }}/rtpagent-{{ rtpagent_download_version }}.tar.gz"
+  when: rtpagent_cleanup_downloads|bool
+  become: true

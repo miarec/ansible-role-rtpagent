@@ -1,0 +1,28 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - set_fact:
+        rtpagent_version: "{{ lookup('env', 'rtpagent_VERSION') }}"
+
+    - name: Install prerequisites
+      block:
+        - name: Update apt cache
+          when: ansible_os_family == "Debian"
+          apt:
+            update_cache: true
+            cache_valid_time: 600
+          changed_when: false
+
+        - package:
+            name: "{{ item }}"
+            state: present
+          with_items:
+            - rsyslog
+
+  roles:
+    - role: ansible-role-rtpagent
+      tags:
+        - rtpagent

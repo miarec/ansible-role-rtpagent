@@ -1,0 +1,25 @@
+---
+- name: Include OS specific vars.
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "../vars/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "../vars/{{ ansible_distribution }}.yml"
+    - "../vars/{{ ansible_os_family }}.yml"
+
+- name: Add rtpagent group
+  group:
+    name: "{{ rtpagent_group }}"
+    state: present
+    system: true
+  when: rtpagent_group != "root"
+
+- name: Add rtpagent user
+  user:
+    name: "{{ rtpagent_user }}"
+    group: "{{ rtpagent_group }}"
+    comment: "rtpagent"
+    home: "{{ rtpagent_install_dir }}"
+    shell: /bin/false
+    system: true
+  when: rtpagent_user != "root"
+

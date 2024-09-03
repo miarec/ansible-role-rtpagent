@@ -1,0 +1,37 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=rtpagent
+After=network.target
+Documentation=https://www.rtpagent.org
+
+[Service]
+Type=simple
+PIDFile={{ rtpagent_pid_file }}
+
+Restart=always
+RestartSec=5s
+
+LimitNOFILE={{ rtpagent_nofile_limit }}
+
+ExecStartPre=-/bin/mkdir /run/rtpagent
+ExecStartPre=-/bin/chown {{ rtpagent_user }}:{{ rtpagent_group }} /run/rtpagent
+
+ExecStart={{ rtpagent_install_dir }}/bin/rtpagent \
+    -p {{ rtpagent_pid_file }} \
+    -u {{ rtpagent_uname }} \
+    -s {{ rtpagent_ctrl_socket }} \
+    -l {{ rtpagent_addr }} \
+    {{ "-A " + rtpagent_advaddr if rtpagent_advaddr else "" }} \
+    -m {{ rtpagent_min_port }} -M {{ rtpagent_max_port }} \
+    -T {{ rtpagent_max_ttl }} \
+    -d {{ rtpagent_log_level }}
+
+ExecStop=/usr/bin/pkill -F {{ rtpagent_pid_file }}
+ExecStopPost=-/bin/rm -R /run/rtpagent
+
+TimeoutStartSec=10
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

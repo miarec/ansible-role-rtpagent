@@ -1,0 +1,5 @@
+---
+# OS Specific variables
+
+syslog_user: syslog
+syslog_group: adm

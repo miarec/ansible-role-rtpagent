@@ -1,0 +1,52 @@
+---
+
+- name: Create rtpagent Log directory
+  file:
+    path: "{{ rtpagent_log_dir }}"
+    state: directory
+    owner: "{{ syslog_user }}"
+    group: "{{ syslog_group }}"
+    mode: "0755"
+
+- name: Create rtpagent Log file with proper permissions
+  file:
+    path: "{{ rtpagent_log_dir }}/{{ rtpagent_log_file }}"
+    state: touch
+    access_time: preserve
+    modification_time: preserve
+    owner: "{{ syslog_user }}"
+    group: "{{ syslog_group }}"
+    mode: "0755"
+
+- name: Configure Rsyslog for rtpagent
+  template:
+    src: rsyslog.conf.j2
+    dest: "/etc/rsyslog.d/{{ rtpagent_service_name }}.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify:
+    - restart rsyslog
+
+- name: Configure rtpagent logrotate
+  template:
+    src: "logrotate.conf.j2"
+    dest: "/etc/logrotate.d/{{ rtpagent_service_name}}"
+    mode: "0644"
+
+
+- name: Create rtpagent SystemD service
+  template:
+    src: rtpagent.service.j2
+    dest: "/etc/systemd/system/{{ rtpagent_service_name }}.service"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify:
+    - reload systemd
+    - restart rtpagent
+
+- name: Enable rtpagent service
+  service:
+    name: "{{ rtpagent_service_name }}"
+    enabled: true
