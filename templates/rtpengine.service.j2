@@ -14,18 +14,22 @@ RestartSec=5s
 
 LimitNOFILE={{ rtpengine_nofile_limit }}
 
+User={{ rtpengine_user }}
+Group={{ rtpengine_group }}
+
 ExecStartPre=-/bin/mkdir /run/rtpengine
 ExecStartPre=-/bin/chown {{ rtpengine_user }}:{{ rtpengine_group }} /run/rtpengine
 
 ExecStart={{ rtpengine_install_dir }}/bin/rtpengine \
+    --table {{ rtpengine_kernel_table }} \
     -p {{ rtpengine_pid_file }} \
-    -u {{ rtpengine_uname }} \
-    -s {{ rtpengine_ctrl_socket }} \
-    -l {{ rtpengine_addr }} \
-    {{ "-A " + rtpengine_advaddr if rtpengine_advaddr else "" }} \
+    --listen-{{ rtpengine_ctrl_protocol }} {{ rtpengine_addr }}:{{ rtpengine_ctrl_port }} \
+    -i {{ rtpengine_addr }}{{ "[!" + rtpengine_advaddr + "]" if rtpengine_advaddr else "" }} \
     -m {{ rtpengine_min_port }} -M {{ rtpengine_max_port }} \
-    -T {{ rtpengine_max_ttl }} \
-    -d {{ rtpengine_log_level }}
+    --log-level {{ rtpengine_log_level }} \
+    --log-facility {{ rtpengine_syslog_facility }} \
+    -t {{ rtpengine_tos }}
+
 
 ExecStop=/usr/bin/pkill -F {{ rtpengine_pid_file }}
 ExecStopPost=-/bin/rm -R /run/rtpengine

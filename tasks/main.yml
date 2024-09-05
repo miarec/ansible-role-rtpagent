@@ -3,7 +3,7 @@
   include_tasks: preflight.yml
 
 - name: Check if rtpengine is installed
-  command: "which {{ rtpengine_install_dir }}/bin/rtpengine"
+  command: "which {{ rtpengine_install_dir }}/usr/bin/rtpengine"
   register: rtpengine_exists
   failed_when: false
   ignore_errors: true
@@ -12,4 +12,4 @@
 - include_tasks: install_from_source.yml    # noqa name[missing]
   when: rtpengine_force_install|bool or rtpengine_exists.rc != 0
 
-# - include_tasks: configure.yml    # noqa name[missing]
+- include_tasks: configure.yml    # noqa name[missing]

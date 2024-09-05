@@ -25,10 +25,13 @@ rtpengine_log_file: rtpengine.log
 rtpengine_logrotate_days: 30
 rtpengine_syslog_facility: local5
 
-# Configures the verbosity level of the log output. Possible log_level values in the order
-# from the most verbose to the least verbose are: DBUG, INFO, WARN, ERR and CRIT.
-rtpengine_log_level: "INFO:LOG_{{ rtpengine_syslog_facility|upper }}"
+# # Configures the verbosity level of the log output. Possible log_level values in the order
+# # from the most verbose to the least verbose are: DBUG, INFO, WARN, ERR and CRIT.
+# rtpengine_log_level: "INFO:LOG_{{ rtpengine_syslog_facility|upper }}"
+rtpengine_log_level: 6  # 0 = no logging, 7 = debug level
 
+# Specifies which kernel table to use for in-kernel packet forwarding
+rtpengine_kernel_table: 0
 
 # This parameter configures rtpengine control socket.
 # The control socket is used by the call controller for the purpose of creating, modifying,
@@ -42,7 +45,12 @@ rtpengine_log_level: "INFO:LOG_{{ rtpengine_syslog_facility|upper }}"
 #    cunix:/var/run/rtpengine.dock
 # This is an equivalent of command line argument "-s ctrl_socket".
 # rtpengine_ctrl_socket: "unix:/var/run/rtpengine/rtpengine.sock"
-rtpengine_ctrl_socket: "udp:*:22222"
+# rtpengine_ctrl_socket: "udp:*:22222"
+
+# This defines the protocol used to cmmunicate with SIP Proxy
+# Choices are 'ng', 'tcp-ng', 'udp', 'tcp', 'http', or 'https'
+rtpengine_ctrl_protocol: "ng"
+rtpengine_ctrl_port: "2223"
 
 # IPv4 listen IP address(es). You can specify either one or two addresses.
 # If two addresses are specified, the rtpengine will work in bridging mode.
@@ -61,31 +69,32 @@ rtpengine_addr: 0.0.0.0
 rtpengine_advaddr:
 
 # This is an equivalent of command line argument "-t tos".
-rtpengine_tos: "0xB8"
+# rtpengine_tos: "0xB8"
+rtpengine_tos: 184
 
-# Directory to write recorded RTP sessions.
-# This is an equivalent of command line argument "-r rec_dir".
-rtpengine_recording_dir:
+# # Directory to write recorded RTP sessions.
+# # This is an equivalent of command line argument "-r rec_dir".
+# rtpengine_recording_dir:
 
-# Spool directory for recording of RTP streams. When the session is stopped,
-# the recording will be moved from the spool directory to the rec_dir directory
-# as specified by the `rtpengine_recording_dir` option.
-# This is an equivalent of command line argument "-S spool_dir".
-rtpengine_spool_dir:
+# # Spool directory for recording of RTP streams. When the session is stopped,
+# # the recording will be moved from the spool directory to the rec_dir directory
+# # as specified by the `rtpengine_recording_dir` option.
+# # This is an equivalent of command line argument "-S spool_dir".
+# rtpengine_spool_dir:
 
-# Prevent recording RTCP packets.
-# This is an equivalent of command line argument "-R"
-rtpengine_prevent_recording_rtcp: true
+# # Prevent recording RTCP packets.
+# # This is an equivalent of command line argument "-R"
+# rtpengine_prevent_recording_rtcp: true
 
 # This parameter configures the name of the file where PID of running rtpengine will be stored.
 # Default is /var/run/rtpengine.pid.
 # This is an equivalent of command line argument "-p pid_file"
 rtpengine_pid_file: /run/rtpengine/rtpengine.pid
 
-# Specify the RTP inactivity timer. Defaults to 60 seconds.
-# If the rtpengine does not receive any RTP packets for more than max_ttl it will then delete the session.
-# This is an equivalent of command line argument "-T max_ttl"
-rtpengine_max_ttl: 60
+# # Specify the RTP inactivity timer. Defaults to 60 seconds.
+# # If the rtpengine does not receive any RTP packets for more than max_ttl it will then delete the session.
+# # This is an equivalent of command line argument "-T max_ttl"
+# rtpengine_max_ttl: 60
 
 
 # Set the maximum number of open file descriptors per process.
@@ -106,24 +115,24 @@ rtpengine_min_port: 35000
 rtpengine_max_port: 65000
 
 
-# Switch rtpengine to UID identified by the uname
-# and optional GID identified by gname when proxy is up and running.
-# This is an equivalent of command line argument "-u uname[:gname]"
-rtpengine_uname: "{{ rtpengine_user }}:{{ rtpengine_group }}"
+# # Switch rtpengine to UID identified by the uname
+# # and optional GID identified by gname when proxy is up and running.
+# # This is an equivalent of command line argument "-u uname[:gname]"
+# rtpengine_uname: "{{ rtpengine_user }}:{{ rtpengine_group }}"
 
-# Set access mode for the controlling UNIX-socket (if used).
-# Only applies if rtpengine runs under a different GID using -u option.
-# This is an equivalent of command line argument "-w sock_mode"
-rtpengine_sock_mode:
-
-
-# Treat all RTP/RTCP sessions as "assymetric", i.e. disable any NAT traversal features unconditionally.
-rtpengine_force_assymetric: false
+# # Set access mode for the controlling UNIX-socket (if used).
+# # Only applies if rtpengine runs under a different GID using -u option.
+# # This is an equivalent of command line argument "-w sock_mode"
+# rtpengine_sock_mode:
 
 
-# Additional arguments passed to rtpengine in command line
-# Use it for the parameters that were not defined in this variables file.
-rtpengine_extra_args:
+# # Treat all RTP/RTCP sessions as "assymetric", i.e. disable any NAT traversal features unconditionally.
+# rtpengine_force_assymetric: false
+
+
+# # Additional arguments passed to rtpengine in command line
+# # Use it for the parameters that were not defined in this variables file.
+# rtpengine_extra_args:
 
 # The following command line arguments were not implemented:
 #  -F
