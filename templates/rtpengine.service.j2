@@ -18,17 +18,17 @@ User={{ rtpengine_user }}
 Group={{ rtpengine_group }}
 
 ExecStartPre=-/bin/mkdir /run/rtpengine
-ExecStartPre=-/bin/chown {{ rtpengine_user }}:{{ rtpengine_group }} /run/rtpengine
+# ExecStartPre=-/bin/chown {{ rtpengine_user }}:{{ rtpengine_group }} /run/rtpengine
 
-ExecStart={{ rtpengine_install_dir }}/bin/rtpengine \
+ExecStart={{ rtpengine_install_dir }}/usr/bin/rtpengine \
     --table {{ rtpengine_kernel_table }} \
     -p {{ rtpengine_pid_file }} \
-    --listen-{{ rtpengine_ctrl_protocol }} {{ rtpengine_addr }}:{{ rtpengine_ctrl_port }} \
+    --listen-{{ rtpengine_ctrl_protocol }}={{ rtpengine_addr }}:{{ rtpengine_ctrl_port }} \
     -i {{ rtpengine_addr }}{{ "[!" + rtpengine_advaddr + "]" if rtpengine_advaddr else "" }} \
     -m {{ rtpengine_min_port }} -M {{ rtpengine_max_port }} \
-    --log-level {{ rtpengine_log_level }} \
-    --log-facility {{ rtpengine_syslog_facility }} \
-    -t {{ rtpengine_tos }}
+    --log-level={{ rtpengine_log_level }} \
+    --log-facility={{ rtpengine_syslog_facility }} \
+    --tos={{ rtpengine_tos }}
 
 
 ExecStop=/usr/bin/pkill -F {{ rtpengine_pid_file }}

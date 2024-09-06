@@ -6,8 +6,10 @@ rtpengine_version: 12.5.1.4
 
 rtpengine_service_name: rtpengine
 
-rtpengine_user: rtpengine
+rtpengine_user: root
 rtpengine_group: "{{ rtpengine_user }}"
+# rtpengine_user: rtpengine
+# rtpengine_group: "{{ rtpengine_user }}"
 
 rtpengine_latest_release_url: "https://api.github.com/repos/sipwise/rtpengine/releases/latest"
 rtpengine_download_base_url: "https://github.com/sipwise/rtpengine/archive"
@@ -55,7 +57,9 @@ rtpengine_ctrl_port: "2223"
 # IPv4 listen IP address(es). You can specify either one or two addresses.
 # If two addresses are specified, the rtpengine will work in bridging mode.
 # This is an equivalent of command line argument "-l addr1[/addr2]".
-rtpengine_addr: 0.0.0.0
+# rtpengine_addr: 0.0.0.0
+rtpengine_addr: 127.0.0.1
+
 
 # IPv6 listen IP address(es). You can specify either one or two addresses.
 # If two addresses are specified, the rtpengine will work in bridging mode.
