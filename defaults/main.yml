@@ -32,7 +32,10 @@ rtpengine_syslog_facility: local5
 # rtpengine_log_level: "INFO:LOG_{{ rtpengine_syslog_facility|upper }}"
 rtpengine_log_level: 6  # 0 = no logging, 7 = debug level
 
-# Specifies which kernel table to use for in-kernel packet forwarding
+# Name of the netfilter chain in which to create the custom forwarding rule required for in-kernel packet forwarding.
+# Defaults to rtpengine. Only used if in-kernel packet forwarding is enabled (table set to zero or higher).
+rtpengine_nft_table: "rtpengine"
+# # Specifies which kernel table to use for in-kernel packet forwarding
 rtpengine_kernel_table: 0
 
 # This parameter configures rtpengine control socket.

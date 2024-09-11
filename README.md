@@ -4,6 +4,19 @@ Ansible role for installing rtpengine
 
 ![CI](https://github.com/miarec/ansible-role-rtpengine/actions/workflows/ci.yml/badge.svg?event=push)
 
+# To do
+
+- Configure rtpengine
+- tshoot nftables/kernel forwarding issue
+- User permission for rtpengine user to create nfttables rules
+- Add steps to instal andconfigure nftables
+
+
+apt install nftables
+systemctl enable nftables
+systemctl start nftables
+
+nft add table ip filter
 
 # Role Variables
 

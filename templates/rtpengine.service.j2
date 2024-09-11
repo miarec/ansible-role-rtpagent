@@ -22,6 +22,7 @@ ExecStartPre=-/bin/mkdir /run/rtpengine
 
 ExecStart={{ rtpengine_install_dir }}/usr/bin/rtpengine \
     --table {{ rtpengine_kernel_table }} \
+    --nftables-chain={{ rtpengine_nft_table }} \
     -p {{ rtpengine_pid_file }} \
     --listen-{{ rtpengine_ctrl_protocol }}={{ rtpengine_addr }}:{{ rtpengine_ctrl_port }} \
     -i {{ rtpengine_addr }}{{ "[!" + rtpengine_advaddr + "]" if rtpengine_advaddr else "" }} \

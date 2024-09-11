@@ -21,6 +21,12 @@
             state: present
           with_items:
             - rsyslog
+            - nftables
+
+        - systemd:
+            name: nftables
+            enabled: true
+            state: started
 
   roles:
     - role: ansible-role-rtpengine
