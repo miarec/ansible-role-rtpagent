@@ -16,14 +16,16 @@
             cache_valid_time: 600
           changed_when: false
 
-        - package:
+        - name: Install Dependencies
+          package:
             name: "{{ item }}"
             state: present
           with_items:
             - rsyslog
             - nftables
 
-        - systemd:
+        - name: Start and Enable nftables service
+          systemd:
             name: nftables
             enabled: true
             state: started
