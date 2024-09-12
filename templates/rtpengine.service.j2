@@ -21,11 +21,11 @@ ExecStart={{ rtpengine_install_dir }}/usr/bin/rtpengine \
     --listen-{{ rtpengine_ctrl_protocol }}={{ rtpengine_addr }}:{{ rtpengine_ctrl_port }} \
     --interface={{ rtpengine_addr }}{{ "[!" + rtpengine_advaddr + "]" if rtpengine_advaddr else "" }} \
     --port-min={{ rtpengine_min_port }} --port-max={{ rtpengine_max_port }} \
-    --nftables-chain={{ rtpengine_nft_table }} \
     --pidfile={{ rtpengine_pid_file }} \
     --log-level={{ rtpengine_log_level }} \
     --log-facility={{ rtpengine_syslog_facility }} \
     --tos={{ rtpengine_tos }} \
+    {{ "--nftables-chain=" + rtpengine_nft_table + " \" if rtpengine_nft_table else "" }}
     {{ "--config-file=" + rtpengine_config_file if rtpengine_config_file else "" }}
 
 

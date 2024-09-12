@@ -39,6 +39,7 @@ rtpengine_config_file:
 # Im not sure if this is required for rtpengine or not
 rtpengine_nofile_limit: 16384
 
+# Optional, required nftables to be installed and running
 # Name of the netfilter chain in which to create the custom forwarding rule required for in-kernel packet forwarding.
 # Defaults to rtpengine. Only used if in-kernel packet forwarding is enabled (table set to zero or higher).
 rtpengine_nft_table: "rtpengine"
@@ -49,21 +50,13 @@ rtpengine_nft_table: "rtpengine"
 rtpengine_ctrl_protocol: "ng"
 rtpengine_ctrl_port: "2223"
 
-# IPv4 listen IP address(es). You can specify either one or two addresses.
-# If two addresses are specified, the rtpengine will work in bridging mode.
-# This is an equivalent of command line argument "-l addr1[/addr2]".
-# rtpengine_addr: 0.0.0.0
+# IPv4 listen IP address.
 rtpengine_addr: 127.0.0.1
 
-# IPv6 listen IP address(es). You can specify either one or two addresses.
-# If two addresses are specified, the rtpengine will work in bridging mode.
-# This is an equivalent of command line argument "-6 addr1[/addr2]".
-# rtpengine_ipv6_addr:
 
 # Set advertised address of rtpengine. Useful if the rtpengine is behind a NAT firewall  (like Amazon EC2).
 # When the rtpengine receives a session request from a SIP controller it will return the IP address(es)
 # specified in this option.
-# This is an equivalent of command line argument "-A advaddr1[/advaddr2]".
 rtpengine_advaddr:
 
 # specifies the TOS value for outgoing packets. same as `--tos`
