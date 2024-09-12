@@ -22,4 +22,3 @@
     shell: /bin/false
     system: true
   when: rtpengine_user != "root"
-

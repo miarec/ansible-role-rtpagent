@@ -1,12 +1,7 @@
 ---
-
-
-
-
 rtpengine_user: rtpengine
 rtpengine_group: "{{ rtpengine_user }}"
 
-# Find version infor here:
 # https://github.com/sipwise/rtpengine/tags
 rtpengine_version: 12.5.1.4
 
@@ -34,14 +29,12 @@ rtpengine_syslog_facility: local5
 
 
 # Configuration
+rtpengine_service_name: rtpengine
 
 # Optional specifies the location of a config file to be used. same as `--config-file`
 # See https://rtpengine.readthedocs.io/en/latest/rtpengine.html for full options
 rtpengine_config_file:
 
-
-
-rtpengine_service_name: rtpengine
 
 # Im not sure if this is required for rtpengine or not
 rtpengine_nofile_limit: 16384
