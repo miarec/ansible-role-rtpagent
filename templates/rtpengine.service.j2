@@ -17,11 +17,7 @@ LimitNOFILE={{ rtpengine_nofile_limit }}
 User={{ rtpengine_user }}
 Group={{ rtpengine_group }}
 
-ExecStartPre=-/bin/mkdir /run/rtpengine
-# ExecStartPre=-/bin/chown {{ rtpengine_user }}:{{ rtpengine_group }} /run/rtpengine
-
 ExecStart={{ rtpengine_install_dir }}/usr/bin/rtpengine \
-    --table {{ rtpengine_kernel_table }} \
     --nftables-chain={{ rtpengine_nft_table }} \
     -p {{ rtpengine_pid_file }} \
     --listen-{{ rtpengine_ctrl_protocol }}={{ rtpengine_addr }}:{{ rtpengine_ctrl_port }} \
@@ -33,7 +29,6 @@ ExecStart={{ rtpengine_install_dir }}/usr/bin/rtpengine \
 
 
 ExecStop=/usr/bin/pkill -F {{ rtpengine_pid_file }}
-ExecStopPost=-/bin/rm -R /run/rtpengine
 
 TimeoutStartSec=10
 TimeoutStopSec=10

@@ -6,10 +6,10 @@ rtpengine_version: 12.5.1.4
 
 rtpengine_service_name: rtpengine
 
-rtpengine_user: root
-rtpengine_group: "{{ rtpengine_user }}"
-# rtpengine_user: rtpengine
+# rtpengine_user: root
 # rtpengine_group: "{{ rtpengine_user }}"
+rtpengine_user: rtpengine
+rtpengine_group: "{{ rtpengine_user }}"
 
 rtpengine_latest_release_url: "https://api.github.com/repos/sipwise/rtpengine/releases/latest"
 rtpengine_download_base_url: "https://github.com/sipwise/rtpengine/archive"
@@ -96,7 +96,8 @@ rtpengine_tos: 184
 # This parameter configures the name of the file where PID of running rtpengine will be stored.
 # Default is /var/run/rtpengine.pid.
 # This is an equivalent of command line argument "-p pid_file"
-rtpengine_pid_file: /run/rtpengine/rtpengine.pid
+rtpengine_pid_dir: /run/rtpengine
+rtpengine_pid_file: "{{  rtpengine_pid_dir }/rtpengine.pid"
 
 # # Specify the RTP inactivity timer. Defaults to 60 seconds.
 # # If the rtpengine does not receive any RTP packets for more than max_ttl it will then delete the session.

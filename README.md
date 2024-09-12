@@ -7,8 +7,8 @@ Ansible role for installing rtpengine
 # To do
 
 - Configure rtpengine
-- tshoot nftables/kernel forwarding issue
-- User permission for rtpengine user to create nfttables rules
+- tshoot nftables/kernel forwarding issue - this was issue with WSL and molecule
+- User permission for rtpengine user
 - Add steps to instal andconfigure nftables
 
 
