@@ -1,15 +1,14 @@
 ---
 
-# rtpengine_version: latest
-# https://github.com/sipwise/rtpengine/tags
-rtpengine_version: 12.5.1.4
 
-rtpengine_service_name: rtpengine
 
-# rtpengine_user: root
-# rtpengine_group: "{{ rtpengine_user }}"
+
 rtpengine_user: rtpengine
 rtpengine_group: "{{ rtpengine_user }}"
+
+# Find version infor here:
+# https://github.com/sipwise/rtpengine/tags
+rtpengine_version: 12.5.1.4
 
 rtpengine_latest_release_url: "https://api.github.com/repos/sipwise/rtpengine/releases/latest"
 rtpengine_download_base_url: "https://github.com/sipwise/rtpengine/archive"
@@ -21,36 +20,36 @@ rtpengine_force_install: false
 rtpengine_cleanup_downloads: true
 
 
-
 rtpengine_log_dir: /var/log/rtpengine
 rtpengine_log_file: rtpengine.log
 rtpengine_logrotate_days: 30
+
+# The log levels correspond to the ones found in the syslog(3) man page.
+# The default value is 6, equivalent to LOG_INFO. The highest possible value is 7 (LOG_DEBUG)
+# which will log everything.Defaults to 6.
+# same as `--log-level`
+rtpengine_log_level: 6
+# The syslog facilty to use when sending log messages to the syslog daemon. Defaults to local5, same as `--log-facility`
 rtpengine_syslog_facility: local5
 
-# # Configures the verbosity level of the log output. Possible log_level values in the order
-# # from the most verbose to the least verbose are: DBUG, INFO, WARN, ERR and CRIT.
-# rtpengine_log_level: "INFO:LOG_{{ rtpengine_syslog_facility|upper }}"
-rtpengine_log_level: 6  # 0 = no logging, 7 = debug level
+
+# Configuration
+
+# Optional specifies the location of a config file to be used. same as `--config-file`
+# See https://rtpengine.readthedocs.io/en/latest/rtpengine.html for full options
+rtpengine_config_file:
+
+
+
+rtpengine_service_name: rtpengine
+
+# Im not sure if this is required for rtpengine or not
+rtpengine_nofile_limit: 16384
 
 # Name of the netfilter chain in which to create the custom forwarding rule required for in-kernel packet forwarding.
 # Defaults to rtpengine. Only used if in-kernel packet forwarding is enabled (table set to zero or higher).
 rtpengine_nft_table: "rtpengine"
-# # Specifies which kernel table to use for in-kernel packet forwarding
-rtpengine_kernel_table: 0
 
-# This parameter configures rtpengine control socket.
-# The control socket is used by the call controller for the purpose of creating, modifying,
-# and deleting RTP sessions. The control socket can also be used to fetch stats from
-#  the rtpengine process, or about specific media sessions.
-# Examples:
-#    udp:127.0.0.1:9000
-#    udp:*:9001
-#    tcp:*:9002
-#    unix:/var/run/rtpengine.dock
-#    cunix:/var/run/rtpengine.dock
-# This is an equivalent of command line argument "-s ctrl_socket".
-# rtpengine_ctrl_socket: "unix:/var/run/rtpengine/rtpengine.sock"
-# rtpengine_ctrl_socket: "udp:*:22222"
 
 # This defines the protocol used to cmmunicate with SIP Proxy
 # Choices are 'ng', 'tcp-ng', 'udp', 'tcp', 'http', or 'https'
@@ -63,7 +62,6 @@ rtpengine_ctrl_port: "2223"
 # rtpengine_addr: 0.0.0.0
 rtpengine_addr: 127.0.0.1
 
-
 # IPv6 listen IP address(es). You can specify either one or two addresses.
 # If two addresses are specified, the rtpengine will work in bridging mode.
 # This is an equivalent of command line argument "-6 addr1[/addr2]".
@@ -75,42 +73,14 @@ rtpengine_addr: 127.0.0.1
 # This is an equivalent of command line argument "-A advaddr1[/advaddr2]".
 rtpengine_advaddr:
 
-# This is an equivalent of command line argument "-t tos".
-# rtpengine_tos: "0xB8"
+# specifies the TOS value for outgoing packets. same as `--tos`
 rtpengine_tos: 184
-
-# # Directory to write recorded RTP sessions.
-# # This is an equivalent of command line argument "-r rec_dir".
-# rtpengine_recording_dir:
-
-# # Spool directory for recording of RTP streams. When the session is stopped,
-# # the recording will be moved from the spool directory to the rec_dir directory
-# # as specified by the `rtpengine_recording_dir` option.
-# # This is an equivalent of command line argument "-S spool_dir".
-# rtpengine_spool_dir:
-
-# # Prevent recording RTCP packets.
-# # This is an equivalent of command line argument "-R"
-# rtpengine_prevent_recording_rtcp: true
 
 # This parameter configures the name of the file where PID of running rtpengine will be stored.
 # Default is /var/run/rtpengine.pid.
 # This is an equivalent of command line argument "-p pid_file"
 rtpengine_pid_dir: /run/rtpengine
-rtpengine_pid_file: "{{  rtpengine_pid_dir }/rtpengine.pid"
-
-# # Specify the RTP inactivity timer. Defaults to 60 seconds.
-# # If the rtpengine does not receive any RTP packets for more than max_ttl it will then delete the session.
-# # This is an equivalent of command line argument "-T max_ttl"
-# rtpengine_max_ttl: 60
-
-
-# Set the maximum number of open file descriptors per process.
-# The default maximum is set by the operating system.
-# The rtpengine requires four file descriptors per session to ensure that it can reliably identify
-# where each stream is coming from in a NAT firewall scenario.
-# This is an equivalent of command line argument "-L nofile_limit"
-rtpengine_nofile_limit: 16384
+rtpengine_pid_file: "{{  rtpengine_pid_dir }}/rtpengine.pid"
 
 # Set lower limit on UDP ports range that the rtpengine uses for RTP/RTCP sessions to min_port.
 # Default is 35000.
@@ -121,30 +91,3 @@ rtpengine_min_port: 35000
 # Default is 65000.
 # This is an equivalent of command line argument "-M max_port"
 rtpengine_max_port: 65000
-
-
-# # Switch rtpengine to UID identified by the uname
-# # and optional GID identified by gname when proxy is up and running.
-# # This is an equivalent of command line argument "-u uname[:gname]"
-# rtpengine_uname: "{{ rtpengine_user }}:{{ rtpengine_group }}"
-
-# # Set access mode for the controlling UNIX-socket (if used).
-# # Only applies if rtpengine runs under a different GID using -u option.
-# # This is an equivalent of command line argument "-w sock_mode"
-# rtpengine_sock_mode:
-
-
-# # Treat all RTP/RTCP sessions as "assymetric", i.e. disable any NAT traversal features unconditionally.
-# rtpengine_force_assymetric: false
-
-
-# # Additional arguments passed to rtpengine in command line
-# # Use it for the parameters that were not defined in this variables file.
-# rtpengine_extra_args:
-
-# The following command line arguments were not implemented:
-#  -F
-#  -i
-#  -n timeout_socket
-#  -P
-#  -a

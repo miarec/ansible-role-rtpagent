@@ -1,23 +1,16 @@
 ---
 
 rtpengine_source_dependencies:
-  # - gcc
-  # - make
-  # - git
-  # - libglib2.0-dev
-  # - libjsonrpc-glib-1.0-dev
   - git
   - dkms
-  # - "linux-headers-{{ ansible_kernel }}"
   - build-essential
   - dpkg-dev
   - cmake
-  - unzip
-  - wget
+  # - unzip
+  # - wget
   - debhelper-compat
   - default-libmysqlclient-dev
   - gperf
-  # - iptables-dev
   - libavcodec-dev
   - libavfilter-dev
   - libavformat-dev
@@ -59,12 +52,3 @@ rtpengine_source_dependencies:
   - libopus0
   - opus-tools
   - libmnl-dev
-
-
-
-# gcc g++ make cmake build-essential git libxtables-dev libip6tc-dev libip4tc-dev libiptc-dev libavfilter-dev libavcodec-dev libswresample-dev libevent-dev libpcap-dev libxmlrpc-core-c3-dev markdown libjson-glib-dev libhiredis-dev libssl-dev libcurl4-openssl-dev gperf libspandsp-dev
-# libopus-dev libopus0 opus-tool
-# libmysqlclient-dev
-# libwebsockets-dev
-# libmnl-dev
-# libmnl-dev

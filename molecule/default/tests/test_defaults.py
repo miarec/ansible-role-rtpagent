@@ -35,7 +35,7 @@ def test_service(host):
 
 def test_socket(host):
     sockets = [
-        "udp://0.0.0.0:22222"
+        "udp://127.0.0.1:2223"
     ]
     for socket in sockets:
         s = host.socket(socket)

@@ -1,5 +1,4 @@
 ---
-
 - name: Create rtpengine Log directory
   file:
     path: "{{ rtpengine_log_dir }}"
