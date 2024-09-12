@@ -1,0 +1,65 @@
+---
+- name: Install source dependencies for rtpengine
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items: "{{ rtpengine_source_dependencies }}"
+
+- name: Create rtpengine Install directory
+  file:
+    path: "{{ rtpengine_install_dir }}"
+    state: directory
+    owner: "{{ rtpengine_user }}"
+    group: "{{ rtpengine_group }}"
+    mode: "0755"
+
+- name: Clone rtpengine GitHub repository
+  git:
+    repo: https://github.com/sipwise/rtpengine.git
+    dest: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
+    version: "mr{{ rtpengine_version }}"
+    recursive: true
+    clone: true
+
+- name: Run rtpengine configure
+  shell: umask 0022 && ./configure
+  args:
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
+    creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/Makefile"
+
+- name: Compile rtpengine
+  shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }} DESTDIR={{ rtpengine_install_dir }}
+  args:
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
+    creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/src/rtpengine"
+
+- name: Install rtpengine
+  shell: umask 0022 && make install DESTDIR={{ rtpengine_install_dir }}
+  args:
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
+    creates: "{{ rtpengine_install_dir }}/bin/rtpengine"
+  notify: restart rtpengine
+
+- name: Register rtpengine binaries
+  command: ls -1 {{ rtpengine_install_dir }}/usr/bin
+  register: _rtpengine_binaries
+  changed_when: false
+
+- name: Add rtpengine binaries to alternatives
+  alternatives:
+    name: "{{ item }}"
+    path: "{{ rtpengine_install_dir }}/usr/bin/{{ item }}"
+    link: "/usr/bin/{{ item }}"
+  with_items: "{{ _rtpengine_binaries.stdout_lines }}"
+
+# Cleanup Source Files
+- name: Clean up the source files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
+    - "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}.tar.gz"
+  when: rtpengine_cleanup_downloads|bool
+  become: true

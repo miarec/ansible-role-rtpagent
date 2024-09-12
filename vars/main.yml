@@ -1,0 +1,54 @@
+---
+
+rtpengine_source_dependencies:
+  - git
+  - dkms
+  - build-essential
+  - dpkg-dev
+  - cmake
+  # - unzip
+  # - wget
+  - debhelper-compat
+  - default-libmysqlclient-dev
+  - gperf
+  - libavcodec-dev
+  - libavfilter-dev
+  - libavformat-dev
+  - libavutil-dev
+  - libbencode-perl
+  - libcrypt-openssl-rsa-perl
+  - libcrypt-rijndael-perl
+  - libcurl4-openssl-dev
+  - libdigest-crc-perl
+  - libdigest-hmac-perl
+  - libevent-dev
+  - libglib2.0-dev
+  - libhiredis-dev
+  - libio-multiplex-perl
+  - libio-socket-inet6-perl
+  - libiptc-dev
+  - libjson-glib-dev
+  - libnet-interface-perl
+  - libpcap0.8-dev
+  - libpcre3-dev
+  - libsocket6-perl
+  - libspandsp-dev
+  - libssl-dev
+  - libswresample-dev
+  - libsystemd-dev
+  - libxmlrpc-core-c3-dev
+  - markdown
+  - curl
+  - zlib1g-dev
+  - libwebsockets-dev
+  - nfs-common
+  - libmosquitto-dev
+  - python3-websockets
+  - libconfig-tiny-perl
+  - libnftnl-dev
+  - pandoc
+  - libncurses-dev
+  - libopus-dev
+  - libopus0
+  - opus-tools
+  - libmnl-dev

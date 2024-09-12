@@ -1,0 +1,79 @@
+---
+rtpengine_user: rtpengine
+rtpengine_group: "{{ rtpengine_user }}"
+
+# https://github.com/sipwise/rtpengine/tags
+rtpengine_version: 12.5.1.4
+
+rtpengine_latest_release_url: "https://api.github.com/repos/sipwise/rtpengine/releases/latest"
+rtpengine_download_base_url: "https://github.com/sipwise/rtpengine/archive"
+
+rtpengine_install_dir: /opt/rtpengine
+rtpengine_download_dir: /tmp
+
+rtpengine_force_install: false
+rtpengine_cleanup_downloads: true
+
+
+rtpengine_log_dir: /var/log/rtpengine
+rtpengine_log_file: rtpengine.log
+rtpengine_logrotate_days: 30
+
+# The log levels correspond to the ones found in the syslog(3) man page.
+# The default value is 6, equivalent to LOG_INFO. The highest possible value is 7 (LOG_DEBUG)
+# which will log everything.Defaults to 6.
+# same as `--log-level`
+rtpengine_log_level: 6
+# The syslog facilty to use when sending log messages to the syslog daemon. Defaults to local5, same as `--log-facility`
+rtpengine_syslog_facility: local5
+
+
+# Configuration
+rtpengine_service_name: rtpengine
+
+# Optional specifies the location of a config file to be used. same as `--config-file`
+# See https://rtpengine.readthedocs.io/en/latest/rtpengine.html for full options
+rtpengine_config_file:
+
+
+# Im not sure if this is required for rtpengine or not
+rtpengine_nofile_limit: 16384
+
+# Optional, required nftables to be installed and running
+# Name of the netfilter chain in which to create the custom forwarding rule required for in-kernel packet forwarding.
+# Defaults to rtpengine. Only used if in-kernel packet forwarding is enabled (table set to zero or higher).
+rtpengine_nft_table: "rtpengine"
+
+
+# This defines the protocol used to cmmunicate with SIP Proxy
+# Choices are 'ng', 'tcp-ng', 'udp', 'tcp', 'http', or 'https'
+rtpengine_ctrl_protocol: "ng"
+rtpengine_ctrl_port: "2223"
+
+# IPv4 listen IP address.
+rtpengine_addr: 127.0.0.1
+
+
+# Set advertised address of rtpengine. Useful if the rtpengine is behind a NAT firewall  (like Amazon EC2).
+# When the rtpengine receives a session request from a SIP controller it will return the IP address(es)
+# specified in this option.
+rtpengine_advaddr:
+
+# specifies the TOS value for outgoing packets. same as `--tos`
+rtpengine_tos: 184
+
+# This parameter configures the name of the file where PID of running rtpengine will be stored.
+# Default is /var/run/rtpengine.pid.
+# This is an equivalent of command line argument "-p pid_file"
+rtpengine_pid_dir: /run/rtpengine
+rtpengine_pid_file: "{{  rtpengine_pid_dir }}/rtpengine.pid"
+
+# Set lower limit on UDP ports range that the rtpengine uses for RTP/RTCP sessions to min_port.
+# Default is 35000.
+# This is an equivalent of command line argument "-m min_port"
+rtpengine_min_port: 35000
+
+# Set upper limit on UDP ports range that the rtpengine uses for RTP/RTCP sessions to max_port.
+# Default is 65000.
+# This is an equivalent of command line argument "-M max_port"
+rtpengine_max_port: 65000

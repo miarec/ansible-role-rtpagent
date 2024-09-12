@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+
+{{ rtpengine_log_dir }}/{{ rtpengine_log_file }} {
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    daily
+    dateext
+    rotate {{ rtpengine_logrotate_days }}
+}

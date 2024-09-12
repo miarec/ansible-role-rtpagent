@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: miarec
+  description: Deploy rtpengine.
+  role_name: rtpengine
+  license: MIT
+  company: MiaRec, Inc.
+  min_ansible_version: '2.7'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+  galaxy_tags:
+    - rtpengine
+
+dependencies: []

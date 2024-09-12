@@ -1,0 +1,58 @@
+---
+- name: Create rtpengine Log directory
+  file:
+    path: "{{ rtpengine_log_dir }}"
+    state: directory
+    owner: "{{ syslog_user }}"
+    group: "{{ syslog_group }}"
+    mode: "0755"
+
+- name: Create rtpengine Log file with proper permissions
+  file:
+    path: "{{ rtpengine_log_dir }}/{{ rtpengine_log_file }}"
+    state: touch
+    access_time: preserve
+    modification_time: preserve
+    owner: "{{ syslog_user }}"
+    group: "{{ syslog_group }}"
+    mode: "0755"
+
+- name: Configure Rsyslog for rtpengine
+  template:
+    src: rsyslog.conf.j2
+    dest: "/etc/rsyslog.d/{{ rtpengine_service_name }}.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify:
+    - restart rsyslog
+
+- name: Configure rtpengine logrotate
+  template:
+    src: "logrotate.conf.j2"
+    dest: "/etc/logrotate.d/{{ rtpengine_service_name }}"
+    mode: "0644"
+
+- name: Create rtpengine PID directory.
+  file:
+    path: "{{ rtpengine_pid_dir }}"
+    state: directory
+    owner: "{{ rtpengine_user }}"
+    group: "{{ rtpengine_group }}"
+    mode: "0755"
+
+- name: Create rtpengine SystemD service
+  template:
+    src: rtpengine.service.j2
+    dest: "/etc/systemd/system/{{ rtpengine_service_name }}.service"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify:
+    - reload systemd
+    - restart rtpengine
+
+- name: Enable rtpengine service
+  service:
+    name: "{{ rtpengine_service_name }}"
+    enabled: true
