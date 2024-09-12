@@ -4,8 +4,10 @@ Ansible role for installing rtpengine
 
 ![CI](https://github.com/miarec/ansible-role-rtpengine/actions/workflows/ci.yml/badge.svg?event=push)
 
+# Dependencies
 
-
+- `rsyslog` by default, rsyslog is used for logging, it is not required, but recommended
+- `nftables` rtpengine will use kernel space packet forwarding of RTP packet, this is done via `nftables`, this is optional but recommended
 
 # Role Variables
 
