@@ -25,8 +25,8 @@
 - name: Compile rtpengine daemon
   shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }} DESTDIR={{ rtpengine_install_dir }}
   environment:
-    with_transcoding: no
-    with_iptables_option: no 
+    with_transcoding: no       # yamllint disable-line rule:truthy
+    with_iptables_option: no   # yamllint disable-line rule:truthy
   args:
     chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/daemon"
     creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/daemon/rtpengine"
@@ -34,20 +34,18 @@
 - name: Install rtpengine daemon
   shell: umask 0022 && make install DESTDIR={{ rtpengine_install_dir }}
   environment:
-    with_transcoding: no
-    with_iptables_option: no 
+    with_transcoding: no       # yamllint disable-line rule:truthy
+    with_iptables_option: no   # yamllint disable-line rule:truthy
   args:
     chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/daemon"
     creates: "{{ rtpengine_install_dir }}/bin/rtpengine"
   notify: restart rtpengine
 
-
 - name: Get kernel version
+  # noqa command-instead-of-shell
   shell: uname -r
   changed_when: false
   register: kernel_version
-
-- debug: msg="{{ kernel_version.stdout }}"
 
 - name: Compile rtpengine kernel-module
   shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }}
