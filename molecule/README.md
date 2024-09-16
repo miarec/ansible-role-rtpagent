@@ -12,7 +12,7 @@ molecule test
 Run test with variable example
 
 ```
-MOLECULE_DISTRO=ubuntu2204 MOLECULE_RTPENGINE_VERSION=latest molecule test
+MOLECULE_DISTRO=ubuntu2204 molecule test
 ```
 
 ## Variables
@@ -22,6 +22,6 @@ MOLECULE_DISTRO=ubuntu2204 MOLECULE_RTPENGINE_VERSION=latest molecule test
     - `ubuntu2204`
     - `ubuntu2004`
 
- - `MOLECULE_RTPENGINE_VERSION` defines variable `rtpengine_version`, default `latest`
+ - `MOLECULE_RTPENGINE_VERSION` defines variable `rtpengine_version`
  - `MOLECULE_ANSIBLE_VERBOSITY` 0-3 used for troubleshooting, will set verbosity of ansible output, same as `-vvv`, default `0`
 

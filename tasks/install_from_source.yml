@@ -22,23 +22,44 @@
     recursive: true
     clone: true
 
-- name: Run rtpengine configure
-  shell: umask 0022 && ./configure
-  args:
-    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
-    creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/Makefile"
-
-- name: Compile rtpengine
+- name: Compile rtpengine daemon
   shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }} DESTDIR={{ rtpengine_install_dir }}
+  environment:
+    with_transcoding: no
+    with_iptables_option: no 
   args:
-    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
-    creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/src/rtpengine"
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/daemon"
+    creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/daemon/rtpengine"
 
-- name: Install rtpengine
+- name: Install rtpengine daemon
   shell: umask 0022 && make install DESTDIR={{ rtpengine_install_dir }}
+  environment:
+    with_transcoding: no
+    with_iptables_option: no 
   args:
-    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/daemon"
     creates: "{{ rtpengine_install_dir }}/bin/rtpengine"
+  notify: restart rtpengine
+
+
+- name: Get kernel version
+  shell: uname -r
+  changed_when: false
+  register: kernel_version
+
+- debug: msg="{{ kernel_version.stdout }}"
+
+- name: Compile rtpengine kernel-module
+  shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }}
+  args:
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/kernel-module"
+    creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/kernel-module/xt_RTPENGINE.ko"
+
+- name: Install rtpengine kernel-module
+  shell: umask 0022 && make install
+  args:
+    chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/kernel-module"
+    creates: "/lib/modules/{{ kernel_version.stdout }}/updates/xt_RTPENGINE.ko"
   notify: restart rtpengine
 
 - name: Register rtpengine binaries
@@ -60,6 +81,5 @@
     state: absent
   with_items:
     - "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}"
-    - "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}.tar.gz"
   when: rtpengine_cleanup_downloads|bool
   become: true
