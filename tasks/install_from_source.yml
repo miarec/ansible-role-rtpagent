@@ -46,18 +46,21 @@
   shell: uname -r
   changed_when: false
   register: kernel_version
+  when: rtpengine_use_kernel_module|bool
 
 - name: Compile rtpengine kernel-module
   shell: umask 0022 && make -j{{ ansible_processor_cores | default(1) + 1 }}
   args:
     chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/kernel-module"
     creates: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/kernel-module/xt_RTPENGINE.ko"
+  when: rtpengine_use_kernel_module|bool
 
 - name: Install rtpengine kernel-module
   shell: umask 0022 && make install
   args:
     chdir: "{{ rtpengine_download_dir }}/rtpengine-{{ rtpengine_version }}/kernel-module"
     creates: "/lib/modules/{{ kernel_version.stdout }}/updates/xt_RTPENGINE.ko"
+  when: rtpengine_use_kernel_module|bool
   notify: restart rtpengine
 
 - name: Register rtpengine binaries
