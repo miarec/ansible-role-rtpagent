@@ -19,7 +19,7 @@ Group={{ rtpengine_group }}
 
 ExecStart={{ rtpengine_install_dir }}/usr/bin/rtpengine \
     --listen-{{ rtpengine_ctrl_protocol }}={{ rtpengine_addr }}:{{ rtpengine_ctrl_port }} \
-    --interface={{ rtpengine_addr }}{{ "[!" + rtpengine_advaddr + "]" if rtpengine_advaddr else "" }} \
+    --interface={{ rtpengine_addr }}{{ "!" + rtpengine_advaddr if rtpengine_advaddr else "" }} \
     --port-min={{ rtpengine_min_port }} --port-max={{ rtpengine_max_port }} \
     --pidfile={{ rtpengine_pid_file }} \
     --log-level={{ rtpengine_log_level }} \
